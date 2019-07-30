@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			jsonp解决跨域的原理是什么?
+				利用script标签的src属性可以访问外部文件的特性
+				1.创建script标签
+				2.将接口地址赋值给src属性, 并且声明一个回调函数
+				3.将script标签添加到文档中
+				4.定义回调函数, 形参为返回的数据
+		-->
+		<script type="text/javascript">
+			// 1.创建script标签
+			var oScript = document.createElement("script");
+			
+			// 2.将接口地址赋值给src属性, 并且声明一个回调函数
+			oScript.src = "https://api.douban.com/v2/movie/in_theaters?callback=fn&apikey=0df993c66c0c636e29ecbb5344252a4a";
+			
+			// 3.将script标签添加到文档中
+			document.head.appendChild(oScript);
+			
+			// 4.定义回调函数, 形参为返回的数据
+			function fn(res){
+				console.log(res);
+			}
+		</script>
+	</body>
+</html>

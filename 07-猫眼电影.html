@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="style/font/iconfont.css"/>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" type="text/css" href="style/maoyan.css"/>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div id="maoyan">
+			<ul class="tabbar">
+				<li class="active">
+					<i class="iconfont icon-dianying"></i>
+					电影
+				</li>
+				<li>
+					<i class="iconfont icon-yingyuana"></i>
+					影院
+				</li>
+				<li>
+					<i class="iconfont icon-wode"></i>
+					我的
+				</li>
+			</ul>
+			<div id="container">
+				<div class="active" id="film">
+					<header>猫眼电影</header>
+					<!-- 电影切换 -->
+					<div id="tabs">
+						<p>深圳<i class="iconfont icon-shang"></i></p>
+						<ul>
+							<li class="active">正在热映</li>
+							<li>即将上映</li>
+						</ul>
+						<div class="iconfont icon-searchicon search"></div>
+					</div>
+					<!-- 电影列表 -->
+					<ul id="content">
+						<!-- <li>
+							<div class="left">
+								<img src="https://p0.meituan.net/128.180/movie/8d3efdc44af04c3254fc9e4ad5334ae32660685.jpg" >
+							</div>
+							<div class="right">
+								<div class="text">
+									<p>扫毒2天地对决</p>
+									<p>观众评分<span>9.0</span></p>
+									<p>主演: <span>汤姆·赫兰德,杰克·吉伦哈尔,塞缪尔·杰克逊</span></p>
+									<p>今天260家影院放映2747场</p>
+								</div>
+								<div class="btn">
+									购票
+								</div>
+							</div>
+						</li> -->
+					</ul>
+				</div>
+				<div id="cinema">影院</div>
+				<div id="mine">我的</div>
+			</div>
+		</div>
+		
+		<script type="text/javascript">
+			// 1.页面加载后执行
+			window.onload = function(){
+				// 2.获取元素
+				var tabbar = document.getElementsByClassName("tabbar")[0];
+				var aLi = tabbar.getElementsByTagName("li");
+				var container = document.getElementById("container");
+				var aDiv = document.querySelectorAll("#container>div");
+				var content = document.getElementById("content");
+				// 3.绑定aLi点击切换事件
+				for(var i=0; i<aLi.length; i++){
+					aLi[i].index = i;
+					aLi[i].onclick = function(){
+						for(var j=0; j<aLi.length; j++){
+							aLi[j].className = "";
+							aDiv[j].className = "";
+						}
+						aDiv[this.index].className = "active";
+						aLi[this.index].className = "active";
+					}
+				}
+				// ajax请求数据
+				ajax("get","https://www.easy-mock.com/mock/5ba06ec82ee5a7654dc13dd7/example/movieInfo","", function(res){
+					var films = JSON.parse(res);
+					var movielist = films.movieList;
+					console.log(movielist);
+					for(var k=0; k<movielist.length; k++){
+						var each = movielist[k];	//每一条数据
+						// 处理评分
+						var p2 = each.sc?`<span>观众评分</span><span class="yellow">${each.sc.toFixed(1)}</span>`:`<span class="yellow">${each.wish}</span>人想看`;
+						//处理购票|预售
+						var buy = each.globalReleased?'<div class="btn red">购票</div>':'<div class="btn blue">预售</div>';
+						content.innerHTML += `
+							<li>
+								<div class="left">
+									<img src="${each.img.replace('w.h','128.180')}" >
+								</div>
+								<div class="right">
+									<div class="text">
+										<p>${each.nm}</p>
+										<p>${p2}</p>
+										<p>主演: <span>${each.star}</span></p>
+										<p>${each.showInfo}</p>
+									</div>
+									${buy}
+								</div>
+							</li>
+						`
+					}
+				})
+			}
+		</script>
+	</body>
+</html>

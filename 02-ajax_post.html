@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="js/md5.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<!--
+			签名: xinyan2019
+			密码: 666666
+			需要加密的字符串: xinyan2019666666
+		-->
+		<input type="text" name="" id="username" value="" />
+		<input type="password" name="" id="pwd1" value="666666" />
+		<button type="button">登录</button>
+		
+		<script type="text/javascript">
+			
+			var oBtn = document.getElementsByTagName("button")[0];
+			var userName = document.getElementsByTagName("input")[0];
+			var pwd1 = document.getElementsByTagName("input")[1];
+			
+			oBtn.onclick = function(){
+				var user = userName.value;	//用户名
+				var pwdVal1 = md5(pwd1.value);		//密码
+				console.log(pwdVal1);
+				// 1.创建xhr对象
+				var xhr;
+				
+				// 2.捕获异常(处理兼容)
+				try{
+					xhr = new XMLHttpRequest();
+				}catch(e){
+					xhr = ActiveXObject('Microsoft.XMLHTTP');
+				}
+				
+				// 3. 打开连接
+				xhr.open('POST', 'https://www.easy-mock.com/mock/5ba06ec82ee5a7654dc13dd7/example/login', true);	//method url isAsync是否异步
+				
+				// var data = {
+				// 	user: user,
+				// 	password: pwdVal1
+				// }
+				
+				// 4.设置请求头
+				xhr.setRequestHeader("Content-Type", "Application/x-www-form-urlencoded");	//默认方式
+				
+				// 5.发送请求(请求参数写在括号中)
+				xhr.send("user="+user+"&password:"+pwdVal1);
+				
+				// 6.监听响应状态
+				xhr.onreadystatechange = function(){
+					if(xhr.readyState == 4 && xhr.status == 200){	//响应成功
+						var data = JSON.parse(xhr.responseText);
+						console.log(data);
+					}
+				}
+			}
+			
+		</script>
+	</body>
+</html>

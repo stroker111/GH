@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			字符串对象的方法:
+				slice(startInd, endInd):	截取
+				indexOf():	找对应下标
+				charAt():	获取指定下标对应位置的字符
+				substring(fIndex,bIndex):	截取字符串
+				split():	将字符串分割成数组
+				toLowerCase():	转为小写字母
+				toUpperCase():	转为大写字母
+				replace():	字符串替换
+				substr():	截取对应下标开始后的几位
+				trim():		去除前后空格
+			
+			正则表达式
+				修饰符:
+					i:	不区分大小写(默认区分大小写)(ignore)
+					g:	全局匹配(global)
+					
+				语法:
+					[0-9]:	指定范围内的数字
+					[a-z]:	指定范围内的字母
+					
+				量词:
+					*	零次或更多次
+					
+				方法:
+					test()	判断字符串中是否含有满足正则表达式的字符
+					match()	匹配字符串中满足正则表达式的字符
+					search()	查找有没有满足正则表达式的字符(有则返回对应下标, 没有则返回-1)
+					replace()	将匹配正则表达式的字符, 替换成新字符
+					
+				
+		-->
+		
+		<script type="text/javascript">
+			
+			var str = "wHacd **349 8-uo ACEe 88uh_Ac1d";
+			
+			var rel = /acd/ig;
+				
+			console.log(rel.test(str));		//true
+			console.log(str.match(rel));	//["acd", "ACD", "Acd"]
+			console.log(str.search(rel));	//2
+			var repStr = str.replace(rel, '*');
+			console.log(repStr);
+			
+			// var rel1 = /[3-9]/g;			//[3-9]范围内的数字, 不包含0,1,2
+			// var rel1 = /\d/g;			//\d: 所有数字
+			// var rel1 = /\D/g;			//\D: 所有非数字
+			// var rel1 = /\w/g;			//\w: 字母,数字,下划线
+			// var rel1 = /\W/g;			//\W: 非字母,数字,下划线
+			// var rel1 = /\s/g;			//\s: 所有空格
+			// console.log(str.replace(rel1, ""));
+			var rel1 = /\S/g;				//\S: 所有非空格字符
+			console.log(str.match(rel1));	
+			
+			// var rel2 = /[a-z]/ig;
+			var rel2 = /[0-9a-z]/ig;	//指定范围内的字符(数字|字母)
+			console.log(str.match(rel2));
+			
+			var rel3 = /[h|2]/ig;	//查找h或者2
+			console.log(str.match(rel3));	
+				
+			var rel4 = /[acd]/ig;	//查找acd任意字符,相当于[a|c|d]
+			console.log(str.match(rel4));
+			
+			var rel5 = /ac[0-9a-z]/ig;	//查找以ac开头, 后面跟着数字或字母的字符
+			console.log(str.match(rel5));
+			
+			var rel6 = /[^ac]/ig;		//查找除了ac的字符
+			console.log(str.match(rel6));
+			
+			// var rel7 = /[0-9]*/g;	//零次或更多次数字(非数字会匹配成空字符串)
+			// var rel7 = /[0-9]+/g;	//至少出现一次数字
+			// var rel7 = /[0-9]{2}/g;		//连着两个的数字
+			var rel7 = /[0-9]{2,3}/g;		//连着两个或三个的数字
+			console.log(str.match(rel7));
+			
+			var phone = prompt("请输入手机号码");
+			var rel8 = /^1[3-9]\d{9}$/g;
+			console.log(rel8.test(phone));
+		</script>
+	</body>
+</html>

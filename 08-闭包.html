@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			什么是闭包?
+				有权访问函数内部声明的变量的函数叫闭包
+				
+			闭包的优势是什么?
+				将变量存储到函数体内
+				
+			闭包的缺点是什么?
+				过度使用闭包, 可能会导致内存泄漏exceed max...
+		-->
+		<button type="button">0</button>
+		<script type="text/javascript">
+			var oBtn = document.getElementsByTagName("button")[0];
+			function a(){
+				var num = 0;
+				return function b(){
+					console.log(num);
+				}
+			}
+			// a()();	//0
+			
+			for(var i=0; i<5;i++){
+				(function(i){
+					setTimeout(function(){
+						// console.log(i);	//0,1,2,3,4
+					}, 500);
+				})(i)
+			}
+			
+			oBtn.onclick = function(){
+				var count = 0;
+				setInterval(function(){
+					count++;
+					oBtn.innerHTML = count;
+				},100);
+			}
+			
+			function foo() {
+				var name = "kebi";
+				return function() {
+					console.log(name);
+				};
+			}
+			// var bar = foo();
+			// bar();
+			
+			function xiaoming(m,n){
+				console.log(n);		//undefined
+				return function xiaohua(o){
+					console.log(m);	//1
+					return function xiaocao(p){
+						return p;
+					}
+				}
+			}
+			xiaoming(1);	
+			xiaoming(1)(2);
+			console.log(xiaoming(1)(2)(3));	//3
+			
+			
+			// 自执行函数
+			(function show(){
+				console.log(666);
+			})()
+			// show();
+		</script>
+	</body>
+</html>

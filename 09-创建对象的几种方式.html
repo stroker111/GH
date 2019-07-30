@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			引用数据类型(存放在堆内容[通过地址进行引用]):
+				Object
+					属性
+					方法: 对象里面的函数叫做方法
+				
+			对象的创建方式:
+				1. 字面量对象
+				2. new创建
+				3. 工厂方式
+				4. 构造函数(通过new方式调用)
+				5. 原型继承
+				6. call和apply继承
+		-->
+		<script type="text/javascript">
+			// 1.字面量创建
+			var obj1 = {
+				name: "小明",
+				age: 18,
+				eat: function(){
+					console.log("我会吃饭");
+				}
+			}
+			console.log(obj1);
+			obj1.eat();
+			
+			// 2.通过new一个Object内置方法
+			var obj2 = new Object();
+			obj2.name = "小花";
+			obj2.age = 16;
+			obj2.eat = function(){
+				console.log("我会吃饭");
+			}
+			console.log(obj2);
+			obj2.eat();
+			
+			// 3.工厂方式
+			function CreateObj(name,age,eat){
+				var obj3 = new Object();	//原料
+				obj3.name = name;			//加工
+				obj3.age = age;
+				obj3.eat = function(){
+					console.log(name+"爱吃"+eat);
+				}
+				return obj3;	//出厂
+			}
+			var obj3 = CreateObj("Eason",38,"辣");
+			var obj4 = CreateObj("Peter",28,"叉烧");
+			var obj5 = CreateObj("笑笑",18,"冰淇淋");
+			console.log(obj3);
+			console.log(obj4);
+			console.log(obj5);
+			obj3.eat();
+			obj4.eat();
+			obj5.eat();
+			
+			// 4.构造函数
+			function CreatePerson(name,age,eat){
+				// var this = new Object();	假想有这一步
+				this.name = name;
+				this.age = age;
+				this.eat = function(){
+					console.log(this.name+"爱吃"+eat);
+				}
+				return this;
+			}
+			var obj6 = new CreatePerson("小草",12,"甜食");
+			var obj7 = new CreatePerson("兔子",2,"萝卜");
+			console.log(obj6);
+			obj6.eat();
+			console.log(obj6.eat === obj7.eat);	//false
+			
+			// 5.原型继承
+			function NewPerson(name,age){
+				// var this = new Object();	假想有这一步
+				this.name = name;
+				this.age = age;
+				return this;
+			}
+			NewPerson.prototype.eat = function(eat){
+				console.log(this.name+"爱吃"+eat);
+			}
+			var obj8 = new NewPerson("牛",5);
+			var obj9 = new NewPerson("羊",4);
+			console.log(obj8);
+			console.log(obj9);
+			console.log(obj8.eat === obj9.eat);	//true
+			obj8.eat("嫩草");
+			obj9.eat("小草");
+			
+			// 6.call和apply继承
+			function NewObj(name,age,eat){
+				this.name = name;
+				this.age = age;
+				this.eat = function(){
+					console.log(name+"爱吃"+eat);
+				}
+			}
+			var obj10 = new Object();
+			NewObj.call(obj10, "小曾", 22, "肉");
+			console.log(obj10);
+			
+			var obj11 = new Object();
+			NewObj.apply(obj11, ["小黎", 18, "榴莲"]);
+			console.log(obj11);
+		</script>
+	</body>
+</html>

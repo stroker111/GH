@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<!--
+			什么是跨域:(面试题)
+				受同源策略影响, 协议,域名,端口三者又任意一者不一致, 则导致跨域
+				
+				协议不一致:
+					http://127.0.0.1
+					https://127.0.0.1
+					
+				域名不一致:
+					http://127.0.0.1
+					http://127.0.0.2
+				
+				端口不一致:
+					http://127.0.0.1:8848
+					http://127.0.0.1:8000
+		
+			跨域报错: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+		-->
+		<script type="text/javascript">
+			ajax("get", "https://api.douban.com/v2/movie/in_theaters", "", function(res){
+				console.log(res);
+			})
+		</script>
+	</body>
+</html>

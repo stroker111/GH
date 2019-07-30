@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<!--
+			原型链:
+				构造函数
+					每个构造函数都有一个prototype属性, 这个属性指向该构造函数的原型对象, 简称"原型";
+					
+				对象:
+					每个对象都有一个__proto__属性, 这个属性指向创建该对象的构造函数的原型对象
+					
+					构造函数: Fn
+						|Fn.prototype
+					Function的原型对象
+						|Function.__proto__
+					Object的原型对象
+						|Object.__proto__
+						null
+						
+					Object(Array, Function, Date)
+		-->
+		<script type="text/javascript">
+			
+			function Fn(name){
+				this.name = name;
+				return this;
+			}
+			var obj = new Fn("小草");
+			console.log(obj);
+			
+			console.log(Fn.prototype);		//Function的原型对象
+			console.log(obj.__proto__);		//Function的原型对象
+			console.log(Fn.prototype === obj.__proto__);	//true
+			
+			console.log(Fn.prototype.__proto__);	//Object的原型对象
+			
+			console.log(Fn.prototype.__proto__.__proto__);	//null
+			console.log(obj.__proto__.__proto__.__proto__);	//null
+		</script>
+	</body>
+</html>

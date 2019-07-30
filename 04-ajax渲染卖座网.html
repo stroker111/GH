@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<style type="text/css">
+			html,body,ul,li,p{margin: 0; padding: 0; font-family: "楷体";}
+			ul,li{list-style: none;}
+			#mask{
+				position: fixed;
+				left: 0;
+				right: 0;
+				top: 0;
+				bottom: 0;
+				background: rgba(150,150,150,.4);
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+			#mask img{
+				width: 150px;
+				height: 100px;
+			}
+			.banner{
+				height: 210px;
+				background: lemonchiffon;
+			}
+			#content>ul:nth-of-type(1){
+				display: flex;
+				justify-content: space-around;
+				align-items: center;
+				border-bottom: 1px solid #ededed;
+				background: #fff;
+			}
+			#content>ul:nth-of-type(1) li{
+				height: 50px;
+				font-size: 14px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+			.active{
+				color: red;
+				border-bottom: 1px solid red;
+			}
+			#content>ul:nth-of-type(2){
+				display: flex;
+				flex-direction: column;
+				margin-left: 15px;
+			}
+			#content>ul:nth-of-type(2) li{
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				height: 100px;
+				padding: 15px;
+				padding-left: 0;
+				border-bottom: 1px solid #ededed;
+			}
+			#content>ul:nth-of-type(2) li .left{
+				width: 66px;
+				height: 100%;
+			}
+			#content>ul:nth-of-type(2) li .left img{
+				width: 100%;
+				height: 100%;
+			}
+			#content>ul:nth-of-type(2) li .right{
+				flex: 1;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-left: 10px;
+				height: 100%;
+			}
+			#content>ul:nth-of-type(2) li .right .text{
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-around;
+			}
+			#content>ul:nth-of-type(2) li .right p{
+				width: 200px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				font-size: 13px;
+				color: #797d82;
+			}
+			#content>ul:nth-of-type(2) li .right p:nth-of-type(1){
+				font-size: 16px;
+				color: #333;
+			}
+			#content>ul:nth-of-type(2) li .right p:nth-of-type(1) span{
+				background: #d2d6dc;
+				padding:0 5px;
+				font-size: 12px;
+				color: #fff;
+				border-radius: 3px;
+			}
+			#content>ul:nth-of-type(2) li .right p:nth-of-type(2) span{
+				margin-left: 5px;
+				color: #ffb232;
+			}
+			#content>ul:nth-of-type(2) li .right .buy{
+				border: 1px solid #ff5f16;
+				color: #ff5f16;
+				font-size: 13px;
+				padding: 3px 10px;
+				border-radius: 3px;
+			}
+			.film{
+				height: 40px;
+				line-height: 40px;
+				text-align: center;
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+				background: #fff;
+				display: none;
+				border-bottom: 1px solid #ededed;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="content">
+			<div class="banner"></div>
+			<div class="film">电影</div>
+			<ul class="tabs">
+				<li class="active">正在热映</li>
+				<li>即将上映</li>
+			</ul>
+			<ul class="content"></ul>
+			
+			<!-- loading蒙层 -->
+			<div id="mask">
+				<img src="img/loading.gif" >
+			</div>
+		</div>
+		<script type="text/javascript">
+			
+			var oUl = document.getElementsByTagName("ul")[1];
+			var mask = document.getElementById("mask");
+			
+			ajax('get','https://www.easy-mock.com/mock/5ba06ec82ee5a7654dc13dd7/example/nowPlaying1','', function(a){
+				mask.style.display = "none";
+				var res = JSON.parse(a);
+				var films = res.data.films;
+				
+				for(var i=0; i<films.length; i++){
+					var each = films[i];	//每一条数据
+					var actor = "";
+					for(var j=0; j<each.actors.length; j++){	//处理演员数据
+						actor += each.actors[j].name+' ';
+					}
+					var grade = each.grade?'观众评分<span>'+each.grade+'</span>':'';		//处理评分
+					oUl.innerHTML += '<li><div class="left"><img src="'+each.poster+'" ></div><div class="right"><div class="text"><p>'+each.name+' <span>2D</span></p><p>'+grade+'</p><p>主演: '+actor+'</p><p>'+each.nation+' | '+each.runtime+'分钟</p></div><div class="buy"><span>购票</span></div></div></li>'
+				}
+				
+				var tabs = document.getElementsByClassName("tabs")[0];
+				var film = document.getElementsByClassName("film")[0];
+				
+				var oHeight = tabs.getBoundingClientRect().top;		//获取tabs与顶部的距离
+				window.onscroll = function(){
+					if(document.documentElement.scrollTop>=oHeight){	//当窗口滚动距离大于oHeights时, 将电影显示出来,将tabs设置固定定位
+						film.style.display = "block";
+						tabs.style.cssText = "position: fixed; top: 41px; left: 0; right: 0;";
+					}else{
+						tabs.style.position = "static";
+						film.style.display = "none";
+					}
+				}
+			});
+		</script>
+	</body>
+</html>
